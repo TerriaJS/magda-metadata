@@ -8,6 +8,8 @@ global:
   enablePriorityClass: false
   defaultContactEmail: "magda-test@googlegroups.com"
   enableMultiTenants: false
+  useCloudSql: true
+  useCombinedDb: false
   urlProcessors:
     image:
       repository: docker.io/data61
@@ -29,6 +31,7 @@ global:
 
 tags:
   all: true
+  cloud-sql-proxy: true
   ingress: true
   priorities: false
   connectors: false
@@ -48,6 +51,9 @@ magda:
       ingressClass: nginx
       enableTls: true
       useDefaultCertificate: true
+    cloud-sql-proxy:
+      ## The cloud sql instance to connect to
+      instanceConnectionName: terriajs:australia-southeast1:test-magda
     gateway:
       enableAuthEndpoint: true
       enableHttpsRedirection: true
@@ -80,21 +86,6 @@ magda:
           objectSrc:
           - "'none'"
           reportUri: https://sdga.report-uri.com/r/d/csp/enforce
-
-    combined-db:
-      waleBackup:
-        method: WAL
-        readOnly: "TRUE"
-        recoveryMode: "immediate"
-        gsPrefix: "gs://magda-postgres-backups-asia/dev"
-        googleApplicationCreds:
-          secretName: storage-account-credentials
-          fileName: db-service-account-private-key.json
-      data:
-        storage: 250Gi
-      resources:
-        limits:
-          cpu: 2000m
 
     elasticsearch:
       data:
